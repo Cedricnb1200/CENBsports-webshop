@@ -1,0 +1,149 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
+
+const products = [
+  {
+    category: "Sportkledij",
+    name: "CENB Performance Shirt",
+    price: 29.99,
+    description: "Ademend sportshirt voor intensieve trainingen.",
+    image: "https://via.placeholder.com/300x300?text=Sportshirt",
+  },
+  {
+    category: "Voetbalgerief",
+    name: "Adidas Predator League",
+    price: 89.99,
+    description: "Voetbalschoenen met perfecte grip voor elke ondergrond.",
+    image: "https://via.placeholder.com/300x300?text=Voetbalschoenen",
+  },
+  {
+    category: "Basketbalgerief",
+    name: "Spalding Streetball",
+    price: 34.95,
+    description: "Officiële basketbal met grip voor indoor en outdoor.",
+    image: "https://via.placeholder.com/300x300?text=Basketbal",
+  },
+  {
+    category: "Tennisgerief",
+    name: "Wilson Pro Staff 97",
+    price: 149.0,
+    description: "Professioneel tennisracket met precisie en kracht.",
+    image: "https://via.placeholder.com/300x300?text=Tennisracket",
+  },
+  {
+    category: "Honkbalgerief",
+    name: "Rawlings Baseball Glove",
+    price: 59.95,
+    description: "Leren handschoen voor comfort en controle.",
+    image: "https://via.placeholder.com/300x300?text=Honkbalhandschoen",
+  },
+  {
+    category: "Boxgerief",
+    name: "Everlast Boks Handschoenen",
+    price: 69.99,
+    description: "Stevige handschoenen voor sparring en training.",
+    image: "https://via.placeholder.com/300x300?text=Bokshandschoenen",
+  },
+  {
+    category: "Athletiekgerief",
+    name: "Nike Zoom Rival",
+    price: 89.0,
+    description: "Lichte spikes voor sprintwedstrijden en training.",
+    image: "https://via.placeholder.com/300x300?text=Spikes",
+  },
+];
+
+export default function HomePage() {
+  const [cart, setCart] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  const handlePayPalDemo = () => {
+    alert("Dit is een demo van de PayPal betaling. In een echte webshop wordt je nu doorgestuurd naar PayPal.");
+  };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-white text-black">
+      <header className="bg-black text-white p-6 flex justify-between items-center">
+        <h1 className="text-3xl font-bold">CENBsports</h1>
+        <div className="text-right">
+          <p className="text-sm">Items in winkelwagen: {cart.length}</p>
+          <p className="text-sm">Totaal: €{total.toFixed(2)}</p>
+        </div>
+      </header>
+
+      <section className="bg-gray-100 p-10 text-center">
+        <h2 className="text-4xl font-bold mb-4">Topkwaliteit sportartikelen voor elke atleet</h2>
+        <p className="text-lg mb-6">Van voetbal tot boksen – alles op één plek</p>
+        <input
+          type="text"
+          placeholder="Zoek op naam of categorie..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-2 border border-gray-300 rounded w-1/2 mb-6"
+        />
+        <br />
+        <Button className="text-white bg-black hover:bg-gray-800">Shop Nu</Button>
+      </section>
+
+      <section className="p-10 grid md:grid-cols-3 gap-6">
+        {filteredProducts.map((product, index) => (
+          <Card key={index} className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <img src={product.image} alt={product.name} className="mb-4 w-full h-48 object-cover" />
+              <h3 className="text-xl font-semibold mb-1">{product.name}</h3>
+              <p className="text-sm text-gray-600 mb-1">{product.category}</p>
+              <p className="text-md font-bold mb-2">€{product.price.toFixed(2)}</p>
+              <p className="text-sm text-gray-700 mb-4">{product.description}</p>
+              <Button className="w-full" onClick={() => addToCart(product)}>
+                Toevoegen aan winkelwagen
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
+
+      <section className="p-10 text-center">
+        <h3 className="text-2xl font-bold mb-4">Afrekenen</h3>
+        <p className="mb-4">Totaalbedrag: €{total.toFixed(2)}</p>
+        <Button className="bg-blue-600 text-white hover:bg-blue-700" onClick={handlePayPalDemo}>
+          Betaal met PayPal (DEMO)
+        </Button>
+      </section>
+
+      <section className="bg-gray-100 p-10 text-center">
+        <h3 className="text-2xl font-bold mb-4">Contacteer ons</h3>
+        <form className="max-w-xl mx-auto text-left">
+          <label className="block mb-2">Naam</label>
+          <input type="text" className="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Jouw naam" />
+
+          <label className="block mb-2">E-mail</label>
+          <input type="email" className="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Jouw e-mailadres" />
+
+          <label className="block mb-2">Bericht</label>
+          <textarea className="w-full p-2 border border-gray-300 rounded mb-4" rows="4" placeholder="Typ hier je bericht..."></textarea>
+
+          <Button className="bg-black text-white hover:bg-gray-800 w-full">Verstuur</Button>
+        </form>
+      </section>
+
+      <footer className="bg-black text-white p-6 text-center">
+        <p>&copy; {new Date().getFullYear()} CENBsports. Alle rechten voorbehouden.</p>
+        <p className="text-sm mt-2">Betaling via PayPal beschikbaar</p>
+      </footer>
+    </div>
+  );
+}
+
